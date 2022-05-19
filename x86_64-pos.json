@@ -6,5 +6,5 @@
   "target-pointer-width": "64",
   "target-c-int-width": "32",
   "os": "none",
-  "executable": true
+  "executables": true
 }
