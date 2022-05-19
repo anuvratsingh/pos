@@ -9,10 +9,7 @@ use core::panic::PanicInfo;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    use core::fmt::Write; // trait for WRITER
-    vga_buffer::WRITER.lock().write_str("Hello").unwrap();
-    write!(vga_buffer::WRITER.lock(), ", some num: {} {}", 42, 1.337).unwrap();
-
+    println!("Hello");
     loop {}
 }
 

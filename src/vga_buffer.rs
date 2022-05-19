@@ -125,17 +125,19 @@ impl fmt::Write for Writer {
     }
 }
 
-// pub fn print_something() {
-//     use core::fmt::Write;
-//     let mut writer = Writer {
-//         column_position: 0,
-//         color_code: ColorCode::new(Color::Yellow, Color::Black),
-//         buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-//     };
+#[macro_export]
+macro_rules! print {
+    ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
+}
 
-//     writer.write_byte(b'H');
-//     writer.write_string("ello ");
-//     write!(writer, "ABCDEFGHIJKLMNOPQRST").unwrap();
-//     write!(writer, "abcdefghijklmnopqrstuvwxyz").unwrap();
-//     write!(writer, "0123456789!@#$%^&*()_+").unwrap();
-// }
+#[macro_export]
+macro_rules! println {
+    () => ($crate::print!("\n"));
+    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($args)*)));
+}
+
+#[doc(hidden)]
+pub fn _print(args: fmt::Arguments) {
+    use core::fmt::Write;
+    WRITER.lock().write_fmt(args).unwrap()
+}
