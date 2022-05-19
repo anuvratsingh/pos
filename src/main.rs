@@ -3,17 +3,16 @@
 
 use core::panic::PanicInfo;
 
-static HELLO: &[u8] = b"Hello, World!";
+use bootloader::{entry_point, BootInfo};
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+entry_point!(kernel_main);
+
+fn kernel_main(boot_info: &'static mut BootInfo) -> ! {
     // Entry function for linker
-    let vga_buffer = 0xb8000 as *mut u8;
 
-    for (i, &byte) in HELLO.iter().enumerate() {
-        unsafe {
-            *vga_buffer.offset(i as isize * 2) = byte;
-            *vga_buffer.offset(i as isize * 2 + 1) = 0xb;
+    if let Some(framebuffer) = boot_info.framebuffer.as_mut() {
+        for byte in framebuffer.buffer_mut() {
+            *byte = 0x6f; // turn screen grey
         }
     }
 
