@@ -10,20 +10,23 @@ panic = "abort"
 [profile.release]
 panic = "abort"
 
+# [[test]]
+# name = "should_panic"
+# harness = false
+
 [features]
 
 [dependencies]
 bootloader = "0.9.8"
-lazy_static = { version = "1", features = ["spin_no_std"] }
 spin = "0.5.2"
-volatile = "0.2.6"
+# 0.4.5 Volatile<ScreenChar> trait bounds not satisfied 
+volatile = "0.2.6" 
+x86_64 = "0.14.2"
+
+[dependencies.lazy_static]
+version = "1.4.0"
+features = ["spin_no_std"]
 
 [package.metadata.bootimage]
-
-build-command = ["build"]
-run-command = ["qemu-system-x86_64", "-drive", "format=raw,file={}"]
-run-args = []
-test-args = []
-test-success-exit-code = 0
-test-timeout = 300
-test-no-reboot = true
+test-args = ["-device", "isa-debug-exit,iobase-0xf4,iosize=0x04"]
+test-success-exit-code = 33
