@@ -9,17 +9,9 @@ use core::panic::PanicInfo;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    // Entry function for linker
-    // let vga_buffer = 0xb8000 as *mut u8;
-
-    // for (i, &byte) in HELLO.iter().enumerate() {
-    //     unsafe {
-    //         *vga_buffer.offset(i as isize * 2) = byte;
-    //         *vga_buffer.offset(i as isize * 2 + 1) = 0xb;
-    //     }
-    // }
-
-    vga_buffer::print_something();
+    use core::fmt::Write; // trait for WRITER
+    vga_buffer::WRITER.lock().write_str("Hello").unwrap();
+    write!(vga_buffer::WRITER.lock(), ", some num: {} {}", 42, 1.337).unwrap();
 
     loop {}
 }
