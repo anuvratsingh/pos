@@ -15,11 +15,9 @@ pub extern "C" fn _start() -> ! {
 
     pos::init();
 
-    x86_64::instructions::interrupts::int3(); // breakpoint exception
-
     #[cfg(test)]
     test_main();
-    
+
     loop {}
 }
 
